@@ -1,4 +1,4 @@
-import { IDateGenerationStrategy, ScheduleType } from "../types"
+import { IDateGenerationStrategy, ISchedule, ScheduleType } from "../types"
 import * as dateFns from 'date-fns'
 import { isDay } from "../utils"
 
@@ -96,6 +96,21 @@ const DateGenerationStrategies: Record<ScheduleType, IDateGenerationStrategy> = 
   }
 }
 
+class Schedule implements ISchedule {
+  dayOf: number
+  type: ScheduleType
+
+  constructor(dayOf: number, type: ScheduleType) {
+    this.dayOf = dayOf
+    this.type = type
+  }
+
+  generateDatesBetween = (start: Date, end: Date): Date[] => {
+    return DateGenerationStrategies[this.type](start, end, this.dayOf)
+  }
+}
+
 export {
-  DateGenerationStrategies
+  DateGenerationStrategies,
+  Schedule
 }
