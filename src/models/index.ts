@@ -1,6 +1,8 @@
 import { IDateGenerationStrategy, ISchedule, ScheduleType, IRecurringEvent, IEvent } from "../types"
 import * as dateFns from 'date-fns'
 import { isDay } from "../utils"
+import { makeEvent } from "../factories"
+import uniqWith from 'lodash/uniqWith'
 
 const DateGenerationStrategies: Record<ScheduleType, IDateGenerationStrategy> = {
   daily: (start, end, _) => {
@@ -121,8 +123,11 @@ class RecurringEvent implements IRecurringEvent {
     this.id = id
   }
 
-  generateEventsBetween(start: Date, end: Date): IEvent[] {
-    throw new Error("Method not implemented.")
+  generateEventsBetween = (start: Date, end: Date): IEvent[] => {
+    const allDates = this.schedules.flatMap(schedule => schedule.generateDatesBetween(start, end))
+    const uniqueDates = uniqWith(allDates, (a, b) => dateFns.isSameDay(a, b))
+
+    return uniqueDates.map(date => makeEvent(this.id, this.archetype.amount, date, this.archetype.categories, "generated"))
   }
 
 }
