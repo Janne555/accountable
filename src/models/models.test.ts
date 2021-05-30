@@ -69,7 +69,7 @@ describe('DateGenerationStrategies', () => {
     });
   });
 
-  fdescribe('quarterly', () => {
+  describe('quarterly', () => {
     it.each([
       [2, "2021-01-01T00:00", "2021-06-01T00:00", 1, ["2021-01-01T00:00", "2021-04-01T00:00"]],
       [0, "2021-05-01T00:00", "2021-03-02T00:00", 1, []],
@@ -111,9 +111,7 @@ describe('DateGenerationStrategies', () => {
     );
 
     it('should only allow up to 365th day', () => {
-      const result = DateGenerationStrategies.yearly(new Date("2021-01-01T00:00"), new Date("2022-10-01T00:00"), 366)
-      expect(result.length).toBe(1)
-      expect(result).toMatchObject([new Date("2021-12-31T00:00")])
+      expect(() => DateGenerationStrategies.yearly(new Date("2021-01-01T00:00"), new Date("2022-10-01T00:00"), 366)).toThrowError("Invalid day of. Must be between 1 and 365")
     });
 
     test('negative numbers should start from the last date', () => {
