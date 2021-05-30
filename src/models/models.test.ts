@@ -1,7 +1,7 @@
 import { DateGenerationStrategies } from ".";
 
 describe('DateGenerationStrategies', () => {
-  fdescribe('daily', () => {
+  describe('daily', () => {
     it.each([
       [2, "2021-05-01T00:00", "2021-05-02T00:00", 1, ["2021-05-01T00:00", "2021-05-02T00:00"]],
       [0, "2021-05-01T00:00", "2021-03-02T00:00", 1, []]
