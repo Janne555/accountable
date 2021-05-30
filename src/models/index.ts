@@ -1,4 +1,4 @@
-import { IDateGenerationStrategy, ISchedule, ScheduleType } from "../types"
+import { IDateGenerationStrategy, ISchedule, ScheduleType, IRecurringEvent, IEvent } from "../types"
 import * as dateFns from 'date-fns'
 import { isDay } from "../utils"
 
@@ -108,6 +108,21 @@ class Schedule implements ISchedule {
   generateDatesBetween = (start: Date, end: Date): Date[] => {
     return DateGenerationStrategies[this.type](start, end, this.dayOf)
   }
+}
+
+class RecurringEvent implements IRecurringEvent {
+  schedules: ISchedule[]
+  archetype: IEvent
+
+  constructor(schedules: ISchedule[], archetype: IEvent) {
+    this.schedules = schedules
+    this.archetype = archetype
+  }
+
+  generateEventsBetween(start: Date, end: Date): IEvent[] {
+    throw new Error("Method not implemented.")
+  }
+
 }
 
 export {
