@@ -40,29 +40,25 @@ describe('DateGenerationStrategies', () => {
 
   describe('monthly', () => {
     it.each([
-      [2, "2021-05-01T00:00", "2021-07-01T00:00", 1, ["2021-05-01T00:00", "2021-06-01T00:00"]],
+      [2, "2021-05-01T00:00", "2021-06-01T00:00", 1, ["2021-05-01T00:00", "2021-06-01T00:00"]],
       [0, "2021-05-01T00:00", "2021-03-02T00:00", 1, []],
-      [0, "2021-02-01T00:00", "2021-03-01T00:00", 1, ["2021-02-01T00:00"]],
-      [0, "2021-02-28T00:00", "2021-03-02T00:00", 1, ["2021-03-01T00:00"]]
+      [1, "2021-02-01T00:00", "2021-02-28T00:00", 1, ["2021-02-01T00:00"]],
+      [1, "2021-02-28T00:00", "2021-03-02T00:00", 1, ["2021-03-01T00:00"]]
     ])(
       'should generate %d date between %s and %s',
       (dates, start, end, dayOf, expectedResult) => {
         const result = DateGenerationStrategies.monthly(new Date(start), new Date(end), dayOf)
 
-        expect(result.length).toBe(dates)
         expect(result).toMatchObject(expectedResult.map(dateStr => new Date(dateStr)))
       }
     );
 
     it('should only allow up to 28th day', () => {
-      const result = DateGenerationStrategies.monthly(new Date("2021-05-01T00:00"), new Date("2021-06-01T00:00"), 29)
-      expect(result.length).toBe(1)
-      expect(result).toMatchObject([new Date("2021-05-28T00:00")])
+      expect(() => DateGenerationStrategies.monthly(new Date("2021-05-01T00:00"), new Date("2021-06-01T00:00"), 29)).toThrowError("Invalid day of. Must be between 1 and 28")
     });
 
     test('negative numbers should start from the last date', () => {
       const result = DateGenerationStrategies.monthly(new Date("2021-01-01T00:00"), new Date("2021-04-01T00:00"), -1)
-      expect(result.length).toBe(1)
       expect(result).toMatchObject([new Date("2021-01-31T00:00"), new Date("2021-02-28T00:00"), new Date("2021-03-31T00:00")])
     });
 
