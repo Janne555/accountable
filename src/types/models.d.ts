@@ -12,10 +12,21 @@ interface ICategory {
   name: string
 }
 
+interface IEvent {
+  id: number
+  amount: number
+  date: Date
+  type: EventType
+  categories: ICategory[]
+}
+
 type ScheduleType = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
+type EventType = 'historical' | 'generated'
 
 export {
   IDateGenerationStrategy,
   ISchedule,
-  ScheduleType
+  ScheduleType,
+  IEvent,
+  EventType
 }
