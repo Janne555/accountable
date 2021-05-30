@@ -1,7 +1,7 @@
-import { DateGenerationStrategy, ScheduleType } from "../types"
+import { IDateGenerationStrategy, ScheduleType } from "../types"
 import * as dateFns from 'date-fns'
 
-const DateGenerationStrategies: Record<ScheduleType, DateGenerationStrategy> = {
+const DateGenerationStrategies: Record<ScheduleType, IDateGenerationStrategy> = {
   daily: (start, end, _) => {
     try {
       return dateFns.eachDayOfInterval({ end, start })

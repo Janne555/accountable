@@ -1,15 +1,15 @@
-interface DateGenerationStrategy {
+interface IDateGenerationStrategy {
   (start: Date, end: Date, dayOf: number): Date[]
 }
 
-interface Schedule {
+interface ISchedule {
   generateDatesBetween(start: Date, end: Date): Date[]
 }
 
 type ScheduleType = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
 
 export {
-  DateGenerationStrategy,
-  Schedule,
+  IDateGenerationStrategy,
+  ISchedule,
   ScheduleType
 }
