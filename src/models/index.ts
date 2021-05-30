@@ -1,7 +1,7 @@
-import { DateGenerationStrategy } from "../types"
+import { DateGenerationStrategy, ScheduleType } from "../types"
 import * as dateFns from 'date-fns'
 
-const DateGenerationStrategies = (<T extends Record<string, DateGenerationStrategy>>(arg: T): T => arg)({
+const DateGenerationStrategies: Record<ScheduleType, DateGenerationStrategy> = {
   daily: (start, end, _) => {
     try {
       return dateFns.eachDayOfInterval({ end, start })
@@ -93,7 +93,7 @@ const DateGenerationStrategies = (<T extends Record<string, DateGenerationStrate
       }
     }
   }
-})
+}
 
 function isDay(dayOf: number): dayOf is Day {
   return dayOf >= 0 && dayOf < 7
