@@ -23,7 +23,7 @@ interface IEvent {
 interface IRecurringEvent {
   schedules: ISchedule[]
   archetype: IEvent
-  generateDatesBetween(start: Date, end: Date): Date[]
+  generateEventsBetween(start: Date, end: Date): IEvent[]
 }
 
 type ScheduleType = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
