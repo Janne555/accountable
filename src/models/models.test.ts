@@ -139,7 +139,7 @@ describe('RecurringEvent', () => {
 
   it('should generate events', () => {
     const recurringEvent = new RecurringEvent([weeklySched, monthlySched, yearlySched], archetype, 55)
-    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-02-05T00:00"))
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2021-02-05T00:00"))
     
     expect(events.map(event => event.date)).toMatchObject([
       new Date("2021-01-03T00:00"),
@@ -154,24 +154,24 @@ describe('RecurringEvent', () => {
   });
 
   it('should generate a single event for a given date', () => {
-    const recurringEvent = new RecurringEvent([weeklySched, monthlySched, yearlySched], archetype, 55)
-    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-01-02T00:00"))
+    const recurringEvent = new RecurringEvent([makeSchedule(0, "weekly"), makeSchedule(3, "monthly"), makeSchedule(3, "yearly")], archetype, 55)
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2021-01-05T00:00"))
     
     expect(events.map(event => event.date)).toMatchObject([
-      new Date("2021-01-01T00:00")
+      new Date("2021-01-03T00:00")
     ])
   });
 
   test('generated event should have the recurring event\'s id', () => {
     const recurringEvent = new RecurringEvent([weeklySched], archetype, 55)
-    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-02-05T00:00"))
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2021-02-05T00:00"))
     
     expect(events.every(event => event.id === 55)).toBeTruthy()
   });
 
   test('generated event should have generated type', () => {
     const recurringEvent = new RecurringEvent([weeklySched], archetype, 55)
-    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-02-05T00:00"))
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2021-02-05T00:00"))
 
     expect(events.every(event => event.type === "generated")).toBeTruthy()
   });
