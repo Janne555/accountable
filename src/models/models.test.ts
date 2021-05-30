@@ -1,4 +1,6 @@
-import { DateGenerationStrategies } from ".";
+import { DateGenerationStrategies, RecurringEvent } from ".";
+import { makeSchedule } from "../factories";
+import { IEvent } from "../types";
 
 describe('DateGenerationStrategies', () => {
   describe('daily', () => {
@@ -119,5 +121,58 @@ describe('DateGenerationStrategies', () => {
       expect(result.length).toBe(1)
       expect(result).toMatchObject([new Date("2021-12-31T00:00")])
     });
+  });
+});
+
+describe('RecurringEvent', () => {
+  const archetype: IEvent = {
+    amount: 1,
+    categories: [],
+    date: new Date(),
+    id: 1,
+    type: "archetype"
+  }
+
+  const weeklySched = makeSchedule(0, "weekly")
+  const monthlySched = makeSchedule(2, "monthly")
+  const yearlySched = makeSchedule(4, "yearly")
+
+  it('should generate events', () => {
+    const recurringEvent = new RecurringEvent([weeklySched, monthlySched, yearlySched], archetype, 55)
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-02-05T00:00"))
+    
+    expect(events.map(event => event.date)).toMatchObject([
+      new Date("2021-01-03T00:00"),
+      new Date("2021-01-10T00:00"),
+      new Date("2021-01-17T00:00"),
+      new Date("2021-01-24T00:00"),
+      new Date("2021-01-31T00:00"),
+      new Date("2021-01-02T00:00"),
+      new Date("2021-02-02T00:00"),
+      new Date("2021-01-04T00:00")
+    ])
+  });
+
+  it('should generate a single event for a given date', () => {
+    const recurringEvent = new RecurringEvent([weeklySched, monthlySched, yearlySched], archetype, 55)
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-01-02T00:00"))
+    
+    expect(events.map(event => event.date)).toMatchObject([
+      new Date("2021-01-01T00:00")
+    ])
+  });
+
+  test('generated event should have the recurring event\'s id', () => {
+    const recurringEvent = new RecurringEvent([weeklySched], archetype, 55)
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-02-05T00:00"))
+    
+    expect(events.every(event => event.id === 55)).toBeTruthy()
+  });
+
+  test('generated event should have generated type', () => {
+    const recurringEvent = new RecurringEvent([weeklySched], archetype, 55)
+    const events = recurringEvent.generateEventsBetween(new Date("2021-01-01T00:00"), new Date("2022-02-05T00:00"))
+
+    expect(events.every(event => event.type === "generated")).toBeTruthy()
   });
 });
