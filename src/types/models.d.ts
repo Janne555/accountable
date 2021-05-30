@@ -36,5 +36,6 @@ export {
   ScheduleType,
   IEvent,
   EventType,
-  IRecurringEvent
+  IRecurringEvent,
+  ICategory
 }
