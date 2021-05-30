@@ -21,13 +21,14 @@ interface IEvent {
 }
 
 interface IRecurringEvent {
+  id: number
   schedules: ISchedule[]
   archetype: IEvent
   generateEventsBetween(start: Date, end: Date): IEvent[]
 }
 
 type ScheduleType = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
-type EventType = 'historical' | 'generated'
+type EventType = 'historical' | 'generated' | 'archetype'
 
 export {
   IDateGenerationStrategy,
