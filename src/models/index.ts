@@ -1,5 +1,6 @@
 import { IDateGenerationStrategy, ScheduleType } from "../types"
 import * as dateFns from 'date-fns'
+import { isDay } from "../utils"
 
 const DateGenerationStrategies: Record<ScheduleType, IDateGenerationStrategy> = {
   daily: (start, end, _) => {
@@ -94,11 +95,6 @@ const DateGenerationStrategies: Record<ScheduleType, IDateGenerationStrategy> = 
     }
   }
 }
-
-function isDay(dayOf: number): dayOf is Day {
-  return dayOf >= 0 && dayOf < 7
-}
-
 
 export {
   DateGenerationStrategies
