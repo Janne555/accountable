@@ -127,5 +127,6 @@ class RecurringEvent implements IRecurringEvent {
 
 export {
   DateGenerationStrategies,
-  Schedule
+  Schedule,
+  RecurringEvent
 }
