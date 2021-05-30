@@ -20,6 +20,12 @@ interface IEvent {
   categories: ICategory[]
 }
 
+interface IRecurringEvent {
+  schedules: ISchedule[]
+  archetype: IEvent
+  generateDatesBetween(start: Date, end: Date): Date[]
+}
+
 type ScheduleType = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
 type EventType = 'historical' | 'generated'
 
