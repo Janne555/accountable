@@ -7,6 +7,11 @@ interface ISchedule {
   generateDatesBetween(start: Date, end: Date): Date[]
 }
 
+interface ICategory {
+  id: number
+  name: string
+}
+
 type ScheduleType = 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'yearly'
 
 export {
