@@ -1,11 +1,6 @@
 import React from 'react'
 import StorageService from '../services/storageService'
-import * as Comlink from 'comlink'
-import { Storage } from '../types';
-
-const storageWorker = new Worker(new URL('../workers/storageWorker.js', import.meta.url))
-
-const storageWorkerAPI: Storage.API = Comlink.wrap(storageWorker) as unknown as Storage.API
+import storageWorkerClient from '../workers/storageWorkerClient'
 
 type DependencyContext = {
   storageService: StorageService
@@ -14,7 +9,7 @@ type DependencyContext = {
 const dependencyContext = React.createContext<DependencyContext>({} as DependencyContext)
 
 function DependencyProvider({ children }: { children: React.ReactNode }): JSX.Element {
-  const { current: storageService } = React.useRef(new StorageService(storageWorkerAPI))
+  const { current: storageService } = React.useRef(new StorageService(storageWorkerClient))
 
   return (
     <dependencyContext.Provider value={{
