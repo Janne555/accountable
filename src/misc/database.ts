@@ -8,7 +8,7 @@ class Database extends Dexie {
   constructor () {
       super("database")
       this.version(1).stores({
-        events: '++id, date, type',
+        events: '++id, date, type, categories',
         recurringEvents: '++id'
       })
       this.events = this.table("events")
