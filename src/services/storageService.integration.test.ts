@@ -36,7 +36,7 @@ describe('storageWorker', () => {
     });
 
     it('should filter by start and end date', async () => {
-      await expect(storageService.getHistoricalEvents({ start: new Date("2020-01-01T00:00"), end: new Date("2020-01-01T00:00") }))
+      await expect(storageService.getHistoricalEvents({ start: new Date("2020-01-01T00:00"), end: new Date("2020-01-04T00:00") }))
         .resolves.toMatchObject([event, event3])
     });
   });
