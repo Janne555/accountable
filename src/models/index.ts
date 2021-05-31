@@ -115,9 +115,9 @@ class Schedule implements ISchedule {
 class RecurringEvent implements IRecurringEvent {
   schedules: ISchedule[]
   archetype: IEvent
-  id: number
+  id?: number
 
-  constructor(schedules: ISchedule[], archetype: IEvent, id: number) {
+  constructor(schedules: ISchedule[], archetype: IEvent, id?: number) {
     this.schedules = schedules
     this.archetype = archetype
     this.id = id
