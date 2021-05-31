@@ -4,7 +4,7 @@ namespace Storage {
     end?: Date
   }
 
-  type API = typeof import('../workers/storageWorker').default
+  type API = import('../workers/storageWorker').default
 }
 
 export {
