@@ -56,7 +56,8 @@ describe('storageWorker', () => {
     })
 
     it('should get them', async () => {
-      await expect(storageService.getRecurringEvents()).resolves.toMatchObject([recurringEvent, recurringEvent2])
+      const result = await storageService.getRecurringEvents()
+      expect(result.map(rEvent => ({ ...rEvent, id: undefined }))).toMatchObject([recurringEvent, recurringEvent2])
     });
   });
 });
