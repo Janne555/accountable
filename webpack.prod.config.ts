@@ -48,6 +48,7 @@ const config: webpack.Configuration = {
     }),
     new ForkTsCheckerWebpackPlugin({
       async: false,
+      typescript: { configFile: "tsconfig.app.json" }
     }),
     new ESLintPlugin({
       extensions: ["js", "jsx", "ts", "tsx"],
