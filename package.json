@@ -38,9 +38,7 @@
   "scripts": {
     "start": "webpack serve --config webpack.dev.config.ts",
     "build": "webpack --config webpack.prod.config.ts",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "test:debug": "react-scripts --inspect-brk test --runInBand --no-cache"
+    "test": "./node_modules/jest/bin/jest.js --watch"
   },
   "eslintConfig": {
     "extends": [
@@ -72,6 +70,7 @@
     "@types/webpack-dev-server": "^3.11.4",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
     "@typescript-eslint/parser": "^4.25.0",
+    "babel-jest": "^27.0.2",
     "babel-loader": "^8.2.2",
     "clean-webpack-plugin": "*",
     "css-loader": "^5.2.6",
@@ -81,7 +80,10 @@
     "eslint-webpack-plugin": "^2.5.4",
     "fork-ts-checker-webpack-plugin": "^6.2.10",
     "html-webpack-plugin": "^5.3.1",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.0.3",
     "style-loader": "^2.0.0",
+    "ts-jest": "^27.0.2",
     "ts-node": "^10.0.0",
     "webpack": "^5.38.1",
     "webpack-cli": "^4.7.0",
