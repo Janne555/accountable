@@ -51,6 +51,12 @@ class StorageWorker {
       .sortBy("date")
   }
 
+  putHistoricalEvents(events: IEvent[], cb: Callback<void>) {
+  }
+
+  deleteHistoricalEvents(ids: number[], cb: Callback<void>) {
+  }
+
   getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>) {
     this._getRecurringEvents(opts)
       .then(rEvents => cb(null, rEvents))
@@ -72,6 +78,12 @@ class StorageWorker {
 
         return rEvents
       })
+  }
+
+  putRecurringEvents(rEvents: IRecurringEvent[], cb: Callback<void>) {
+  }
+
+  deleteRecurringEvents(ids: number[], cb: Callback<void>) {
   }
 }
 

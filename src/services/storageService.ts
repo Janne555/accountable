@@ -39,6 +39,14 @@ class StorageService {
     })
   }
 
+  putHistoricalEvents(events: IEvent[]): Promise<void> {
+    return Promise.reject()
+  }
+
+  deleteHistoricalEvents(ids: number[]): Promise<void> {
+    return Promise.reject()
+  }
+
   getRecurringEvents(options: Storage.Options = {}): Promise<IRecurringEvent[]> {
     return new Promise<IRecurringEvent[]>((resolve, reject) => {
       this.workerApi.getRecurringEvents(options, (error, data) => {
@@ -54,6 +62,15 @@ class StorageService {
       })
     })
   }
+
+  putRecurringEvents(rEvents: IRecurringEvent[]): Promise<void> {
+    return Promise.reject()
+  }
+
+  deleteRecurringEvents(ids: number[]): Promise<void> {
+    return Promise.reject()
+  }
+
 }
 
 export default StorageService
