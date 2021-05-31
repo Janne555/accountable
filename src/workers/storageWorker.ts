@@ -7,11 +7,21 @@ class StorageWorker {
     this.database = database
   }
 
-  getEvents({ }: Storage.Options, cb: Callback<IEvent[]>) {
+  getEvents(opts: Storage.Options, cb: Callback<IEvent[]>) {
 
   }
 
-  getHistoricalEvents({ end, start }: Storage.Options, cb: Callback<IEvent[]>) {
+  private _getEvents({ end, start }: Storage.Options): Promise<IEvent[]> {
+    return Promise.reject("unimplemented")
+  }
+
+  getHistoricalEvents(opts: Storage.Options, cb: Callback<IEvent[]>) {
+    this._getHistoricalEvents(opts)
+      .then(events => cb(null, events))
+      .catch(error => cb(error))
+  }
+
+  private _getHistoricalEvents({ end, start }: Storage.Options): Promise<IEvent[]> {
     let collection = this.database.events.toCollection()
 
     if (start) {
@@ -22,17 +32,21 @@ class StorageWorker {
       collection = collection.filter(event => event.date.getTime() < end.getTime())
     }
 
-    collection.toArray()
-      .then(events => cb(null, events))
-      .catch(error => cb(error))
+    return collection
+      .sortBy("date")
   }
 
   getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>) {
-    let collection = this.database.recurringEvents.toCollection()
-
-    collection.toArray()
+    this._getRecurringEvents(opts)
       .then(rEvents => cb(null, rEvents))
       .catch(error => cb(error))
+  }
+
+  private _getRecurringEvents(opts: Storage.Options): Promise<IRecurringEvent[]> {
+    let collection = this.database.recurringEvents.toCollection()
+
+    return collection
+      .sortBy("date")
   }
 }
 
