@@ -14,6 +14,7 @@ interface IEvent {
   date: Date
   type: EventType
   categories: string[]
+  description: string
 }
 
 interface IRecurringEvent {

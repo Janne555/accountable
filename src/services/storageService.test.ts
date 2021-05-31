@@ -8,7 +8,8 @@ describe('storageService', () => {
     categories: [],
     date: new Date(),
     id: 0,
-    type: "historical"
+    type: "historical",
+    description: "hello"
   }
 
   const recurringEvent: IRecurringEvent = makeRecurringEvent([], { ...event, type: "archetype" }, 0)
@@ -20,8 +21,11 @@ describe('storageService', () => {
   const mockWorkerApi: Storage.API = {
     getEvents,
     getHistoricalEvents,
-    getRecurringEvents
-  }
+    getRecurringEvents,
+    _getEvents: jest.fn(),
+    _getHistoricalEvents: jest.fn(),
+    _getRecurringEvents: jest.fn()
+  } as any
 
   const storageService = new StorageService(mockWorkerApi)
 

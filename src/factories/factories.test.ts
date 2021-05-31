@@ -9,14 +9,14 @@ describe('makeSchedule', () => {
 
 describe('makeEvent', () => {
   it('should make event', () => {
-    const schedule = makeEvent(0, 0, new Date(), [], "historical")
+    const schedule = makeEvent(0, new Date(), [], "historical", "hello")
     expect(schedule).toBeDefined()
   });
 });
 
 describe('makeRecurringEvent', () => {
   it('should make event', () => {
-    const schedule = makeRecurringEvent([], {} as any, 0)
+    const schedule = makeRecurringEvent([], {} as any)
     expect(schedule).toBeDefined()
   });
 });
