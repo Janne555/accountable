@@ -40,7 +40,8 @@
   "scripts": {
     "start": "webpack serve --config webpack.dev.config.ts",
     "build": "webpack --config webpack.prod.config.ts",
-    "test": "./node_modules/jest/bin/jest.js --watch"
+    "test": "./node_modules/jest/bin/jest.js --watch",
+    "coverage": "./node_modules/jest/bin/jest.js --coverage"
   },
   "eslintConfig": {
     "extends": [
