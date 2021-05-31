@@ -2,12 +2,12 @@ import { useDependecies } from "./useDependencies";
 import { useQuery, useMutation, useQueryClient } from 'react-query'
 import { Storage } from '../types'
 
-function useEventsQuery(opts: Storage.Options) {
+function useEventsQuery(opts?: Storage.Options) {
   const { storageService } = useDependecies()
   return useQuery('events', () => storageService.getEvents(opts))
 }
 
-function useHistoricalEventsMutation(opts: Storage.Options) {
+function useHistoricalEventsMutation() {
   const { storageService } = useDependecies()
   const queryClient = useQueryClient()
   const putMutation = useMutation(storageService.putHistoricalEvents, { onSettled: () => queryClient.invalidateQueries("events") })
@@ -19,7 +19,7 @@ function useHistoricalEventsMutation(opts: Storage.Options) {
   }
 }
 
-function useRecurringEventsMutation(opts: Storage.Options) {
+function useRecurringEventsMutation() {
   const { storageService } = useDependecies()
   const queryClient = useQueryClient()
   const putMutation = useMutation(storageService.putRecurringEvents, { onSettled: () => queryClient.invalidateQueries("events") })
