@@ -72,7 +72,7 @@ describe('storageWorker', () => {
 
       await storageService.deleteHistoricalEvents([oldEvent.id])
 
-      const allEvents = (await db.events.toArray()).map(e => ({ ...e, id: undefined }))
+      const allEvents = await db.events.toArray()
       expect(allEvents).not.toContainEqual(oldEvent)
     });
   });
@@ -107,16 +107,16 @@ describe('storageWorker', () => {
     it('should modify events', async () => {
       const oldEvent = await db.recurringEvents.toCollection().first()
 
-      const modifiedEvent = makeRecurringEvent([], makeEvent(1, new Date(), [], "archetype", "Hello"), oldEvent?.id)
+      const modifiedEvent = makeRecurringEvent([], makeEvent(1, new Date(), [], "archetype", "modified thing"), oldEvent?.id)
       await storageService.putRecurringEvents([modifiedEvent])
 
-      const allEvents = (await db.recurringEvents.toArray()).map(e => ({ ...e, id: undefined }))
+      const allEvents = await db.recurringEvents.toArray()
       expect(allEvents).toContainEqual(modifiedEvent)
       expect(allEvents).not.toContainEqual(oldEvent)
     });
 
     it('should delete events', async () => {
-      const oldEvent = await db.events.toCollection().first()
+      const oldEvent = await db.recurringEvents.toCollection().first()
 
       if (!oldEvent?.id) {
         throw Error("invalid test state")
@@ -124,7 +124,7 @@ describe('storageWorker', () => {
 
       await storageService.deleteRecurringEvents([oldEvent.id])
 
-      const allEvents = (await db.recurringEvents.toArray()).map(e => ({ ...e, id: undefined }))
+      const allEvents = await db.recurringEvents.toArray()
       expect(allEvents).not.toContainEqual(oldEvent)
     });
   });
