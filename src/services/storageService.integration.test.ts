@@ -46,10 +46,10 @@ describe('storageWorker', () => {
     });
 
     it('should add events', async () => {
-      const newEvent = makeEvent(1, new Date(), [], "historical", "Hello")
+      const newEvent = makeEvent(1, new Date(), [], "historical", "new event")
       await storageService.putHistoricalEvents([newEvent])
-      const allEvents = await db.events.toArray()
-      expect(allEvents).toContain(newEvent)
+      const allEvents = (await db.events.toArray()).map(e => ({ ...e, id: undefined }))
+      expect(allEvents).toContainEqual(newEvent)
     });
 
     it('should modify events', async () => {
@@ -58,7 +58,7 @@ describe('storageWorker', () => {
       const modifiedEvent = makeEvent(1, new Date(), [], "historical", "Hello", oldEvent?.id)
       await storageService.putHistoricalEvents([modifiedEvent])
 
-      const allEvents = await db.events.toArray()
+      const allEvents = (await db.events.toArray()).map(e => ({ ...e, id: undefined }))
       expect(allEvents).toContain(modifiedEvent)
       expect(allEvents).not.toContain(oldEvent)
     });
@@ -72,7 +72,7 @@ describe('storageWorker', () => {
 
       await storageService.deleteHistoricalEvents([oldEvent.id])
 
-      const allEvents = await db.events.toArray()
+      const allEvents = (await db.events.toArray()).map(e => ({ ...e, id: undefined }))
       expect(allEvents).not.toContain(oldEvent)
     });
   });
@@ -100,7 +100,7 @@ describe('storageWorker', () => {
     it('should add events', async () => {
       const newEvent = makeRecurringEvent([], makeEvent(1, new Date(), [], "archetype", "Hello"))
       await storageService.putRecurringEvents([newEvent])
-      const allEvents = await db.recurringEvents.toArray()
+      const allEvents = (await db.recurringEvents.toArray()).map(e => ({ ...e, id: undefined }))
       expect(allEvents).toContain(newEvent)
     });
 
@@ -110,7 +110,7 @@ describe('storageWorker', () => {
       const modifiedEvent = makeRecurringEvent([], makeEvent(1, new Date(), [], "archetype", "Hello"), oldEvent?.id)
       await storageService.putRecurringEvents([modifiedEvent])
 
-      const allEvents = await db.events.toArray()
+      const allEvents = (await db.recurringEvents.toArray()).map(e => ({ ...e, id: undefined }))
       expect(allEvents).toContain(modifiedEvent)
       expect(allEvents).not.toContain(oldEvent)
     });
@@ -124,7 +124,7 @@ describe('storageWorker', () => {
 
       await storageService.deleteRecurringEvents([oldEvent.id])
 
-      const allEvents = await db.events.toArray()
+      const allEvents = (await db.recurringEvents.toArray()).map(e => ({ ...e, id: undefined }))
       expect(allEvents).not.toContain(oldEvent)
     });
   });
