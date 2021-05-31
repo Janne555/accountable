@@ -107,7 +107,7 @@ class Schedule implements ISchedule {
     this.type = type
   }
 
-  generateDatesBetween = (start: Date, end: Date): Date[] => {
+  generateDatesBetween(start: Date, end: Date): Date[] {
     return DateGenerationStrategies[this.type](start, end, this.dayOf)
   }
 }
@@ -123,7 +123,7 @@ class RecurringEvent implements IRecurringEvent {
     this.id = id
   }
 
-  generateEventsBetween = (start: Date, end: Date): IEvent[] => {
+  generateEventsBetween(start: Date, end: Date): IEvent[] {
     const allDates = this.schedules.flatMap(schedule => schedule.generateDatesBetween(start, end))
     const uniqueDates = uniqWith(allDates, (a, b) => dateFns.isSameDay(a, b))
 
