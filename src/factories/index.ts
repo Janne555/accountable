@@ -16,8 +16,8 @@ function makeEvent(amount: number, date: Date, categories: ICategory[], type: Ev
   }
 }
 
-function makeRecurringEvent(schedules: ISchedule[], archetype: IEvent): IRecurringEvent {
-  return new RecurringEvent(schedules, archetype)
+function makeRecurringEvent(schedules: ISchedule[], archetype: IEvent, id?: number): IRecurringEvent {
+  return new RecurringEvent(schedules, archetype, id)
 }
 
 export {
