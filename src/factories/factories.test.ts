@@ -1,4 +1,4 @@
-import { makeEvent, makeSchedule } from ".";
+import { makeEvent, makeRecurringEvent, makeSchedule } from ".";
 
 describe('makeSchedule', () => {
   it('should make schedule', () => {
@@ -10,6 +10,13 @@ describe('makeSchedule', () => {
 describe('makeEvent', () => {
   it('should make event', () => {
     const schedule = makeEvent(0, 0, new Date(), [], "historical")
+    expect(schedule).toBeDefined()
+  });
+});
+
+describe('makeRecurringEvent', () => {
+  it('should make event', () => {
+    const schedule = makeRecurringEvent([], {} as any, 0)
     expect(schedule).toBeDefined()
   });
 });
