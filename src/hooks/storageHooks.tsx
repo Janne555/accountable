@@ -1,6 +1,6 @@
 import { useDependecies } from "./useDependencies";
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { Storage } from '../types'
+import { IEvent, IRecurringEvent, Storage } from '../types'
 
 function useEventsQuery(opts?: Storage.Options) {
   const { storageService } = useDependecies()
@@ -10,8 +10,8 @@ function useEventsQuery(opts?: Storage.Options) {
 function useHistoricalEventsMutation() {
   const { storageService } = useDependecies()
   const queryClient = useQueryClient()
-  const putMutation = useMutation(storageService.putHistoricalEvents, { onSettled: () => queryClient.invalidateQueries("events") })
-  const deleteMutation = useMutation(storageService.deleteHistoricalEvents, { onSettled: () => queryClient.invalidateQueries("events") })
+  const putMutation = useMutation((events: IEvent[]) => storageService.putHistoricalEvents(events), { onSettled: () => queryClient.invalidateQueries("events") })
+  const deleteMutation = useMutation((ids: number[]) => storageService.deleteHistoricalEvents(ids), { onSettled: () => queryClient.invalidateQueries("events") })
 
   return {
     putMutation,
@@ -22,8 +22,8 @@ function useHistoricalEventsMutation() {
 function useRecurringEventsMutation() {
   const { storageService } = useDependecies()
   const queryClient = useQueryClient()
-  const putMutation = useMutation(storageService.putRecurringEvents, { onSettled: () => queryClient.invalidateQueries("events") })
-  const deleteMutation = useMutation(storageService.deleteRecurringEvents, { onSettled: () => queryClient.invalidateQueries("events") })
+  const putMutation = useMutation((rEvents: IRecurringEvent[]) => storageService.putRecurringEvents(rEvents), { onSettled: () => queryClient.invalidateQueries("events") })
+  const deleteMutation = useMutation((ids: number[]) => storageService.deleteRecurringEvents(ids), { onSettled: () => queryClient.invalidateQueries("events") })
 
   return {
     putMutation,
