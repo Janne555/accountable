@@ -8,12 +8,12 @@ interface ISchedule {
 }
 
 interface ICategory {
-  id: number
+  id?: number
   name: string
 }
 
 interface IEvent {
-  id: number
+  id?: number
   amount: number
   date: Date
   type: EventType
@@ -21,7 +21,7 @@ interface IEvent {
 }
 
 interface IRecurringEvent {
-  id: number
+  id?: number
   schedules: ISchedule[]
   archetype: IEvent
   generateEventsBetween(start: Date, end: Date): IEvent[]
