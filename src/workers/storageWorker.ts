@@ -1,3 +1,4 @@
+import { makeSchedule } from "../factories"
 import { IEvent, Callback, Storage, IRecurringEvent, Database } from "../types"
 
 class StorageWorker {
@@ -8,11 +9,25 @@ class StorageWorker {
   }
 
   getEvents(opts: Storage.Options, cb: Callback<IEvent[]>) {
-
+    this._getEvents(opts)
+      .then(events => cb(null, events))
+      .catch(error => cb(error))
   }
 
-  private _getEvents({ end, start }: Storage.Options): Promise<IEvent[]> {
-    return Promise.reject("unimplemented")
+  private async _getEvents(opts: Storage.Options): Promise<IEvent[]> {
+    const { start, end } = opts
+    const historicalEvents = await this._getHistoricalEvents(opts)
+    let allEvents = historicalEvents
+
+    if (start && end) {
+      const recurringEvents = await this._getRecurringEvents(opts)
+      const generatedEvents = recurringEvents.flatMap(rEvent => rEvent.generateEventsBetween(start, end))
+      allEvents = allEvents.concat(generatedEvents)
+    }
+
+    allEvents.sort((a, b) => a.date.getTime() - b.date.getTime())
+
+    return allEvents
   }
 
   getHistoricalEvents(opts: Storage.Options, cb: Callback<IEvent[]>) {
@@ -42,11 +57,21 @@ class StorageWorker {
       .catch(error => cb(error))
   }
 
+  /**
+   * gets the recurring events and formats them to classes
+   */
   private _getRecurringEvents(opts: Storage.Options): Promise<IRecurringEvent[]> {
     let collection = this.database.recurringEvents.toCollection()
 
     return collection
       .sortBy("date")
+      .then(rEvents => {
+        rEvents.forEach(rEvent => {
+          rEvent.schedules = rEvent.schedules.map(schedule => makeSchedule(schedule.dayOf, schedule.type))
+        })
+
+        return rEvents
+      })
   }
 }
 
