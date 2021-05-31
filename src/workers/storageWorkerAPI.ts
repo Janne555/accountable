@@ -82,7 +82,7 @@ class StorageWorkerAPI {
    * gets the recurring events and formats them to classes
    */
   private _getRecurringEvents(opts: Storage.Options): Promise<IRecurringEvent[]> {
-    let collection = this.database.recurringEvents.toCollection()
+    const collection = this.database.recurringEvents.toCollection()
 
     return collection
       .sortBy("date")
