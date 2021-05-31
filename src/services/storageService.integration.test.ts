@@ -11,12 +11,12 @@ describe('storageWorker', () => {
   const storageService = new StorageService(storageWorker)
 
   const event: IEvent = { amount: 1, categories: [], date: new Date("2020-01-01T00:00"), type: "historical", description: "hello" }
-  const event2: IEvent = { amount: 2, categories: [], date: new Date("2020-02-01T00:00"), type: "historical", description: "hello" }
-  const event3: IEvent = { amount: 3, categories: [], date: new Date("2020-01-03T00:00"), type: "historical", description: "hello" }
-  const event4: IEvent = { amount: 4, categories: [], date: new Date("2004-01-01T00:00"), type: "historical", description: "hello" }
+  const event2: IEvent = { amount: 2, categories: [], date: new Date("2020-02-01T00:00"), type: "historical", description: "there" }
+  const event3: IEvent = { amount: 30, categories: [], date: new Date("2020-01-03T00:00"), type: "historical", description: "hello" }
+  const event4: IEvent = { amount: 40, categories: [], date: new Date("2004-01-01T00:00"), type: "historical", description: "bar" }
 
   const recurringEvent: IRecurringEvent = makeRecurringEvent([makeSchedule(0, "weekly")], { amount: 5, categories: [], date: new Date("2020-01-01T00:00"), type: "archetype", description: "hello" })
-  const recurringEvent2: IRecurringEvent = makeRecurringEvent([makeSchedule(1, "monthly")], { amount: 50, categories: ["asd"], date: new Date("2021-01-01T00:00"), type: "archetype", description: "hello" })
+  const recurringEvent2: IRecurringEvent = makeRecurringEvent([makeSchedule(1, "monthly")], { amount: 50, categories: ["asd"], date: new Date("2021-01-01T00:00"), type: "archetype", description: "there" })
 
   describe('historical events', () => {
     beforeEach(async () => {
@@ -75,6 +75,11 @@ describe('storageWorker', () => {
       const allEvents = await db.events.toArray()
       expect(allEvents).not.toContainEqual(oldEvent)
     });
+
+    it('should filter using json logic', async () => {
+      const result = await storageService.getHistoricalEvents({ rulesLogic: { "==": [{ var: "amount" }, 1] } })
+      expect(result.map(e => ({ ...e, id: undefined }))).toContainEqual(event)
+    });
   });
 
   describe('recurring events', () => {
@@ -126,6 +131,17 @@ describe('storageWorker', () => {
 
       const allEvents = await db.recurringEvents.toArray()
       expect(allEvents).not.toContainEqual(oldEvent)
+    });
+
+
+    it('should ignore dates', async () => {
+      const result = await storageService.getRecurringEvents({ start: new Date(), end: new Date() })
+      expect(result).toHaveProperty('length', 2)
+    });
+
+    it('should ignore json logic', async () => {
+      const result = await storageService.getRecurringEvents({ rulesLogic: { "==": [{ var: "amount" }, 1] } })
+      expect(result).toHaveProperty('length', 2)
     });
   });
 
@@ -190,6 +206,53 @@ describe('storageWorker', () => {
           type: "generated",
           id: recurringEvent2.id,
           date: new Date("2020-02-01T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-02-02T00:00")
+        }
+      ]
+
+      expect(result.map(event => ({ ...event, id: undefined }))).toMatchObject(expected)
+    });
+
+    it('should filter using json logic', async () => {
+      const result = await storageService.getEvents({
+        rulesLogic: { and: [{ ">=": [{ var: "amount" }, 4] }, { "==": [{ var: "description" }, "hello"] }] },
+        end: new Date("2020-02-02T00:00"),
+        start: new Date("2020-01-01T00:00")
+      })
+      
+      const expected: IEvent[] = [
+        {
+          ...event3,
+          id: undefined
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-05T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-12T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-19T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-26T00:00")
         },
         {
           ...recurringEvent.archetype,
