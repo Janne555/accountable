@@ -27,8 +27,12 @@ class StorageWorker {
       .catch(error => cb(error))
   }
 
-  getRecurringEvents({ }: Storage.Options, cb: Callback<IRecurringEvent[]>) {
+  getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>) {
+    let collection = this.database.recurringEvents.toCollection()
 
+    collection.toArray()
+      .then(rEvents => cb(null, rEvents))
+      .catch(error => cb(error))
   }
 }
 
