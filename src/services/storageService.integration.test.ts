@@ -1,5 +1,6 @@
 import { makeRecurringEvent, makeSchedule } from "../factories";
 import Database from "../misc/database";
+import { RecurringEvent } from "../models";
 import { IEvent, IRecurringEvent } from "../types";
 import StorageWorker from "../workers/storageWorker";
 import StorageService from "./storageService";
@@ -58,6 +59,11 @@ describe('storageWorker', () => {
     it('should get them', async () => {
       const result = await storageService.getRecurringEvents()
       expect(result.map(rEvent => ({ ...rEvent, id: undefined }))).toMatchObject([recurringEvent, recurringEvent2])
+    });
+
+    test('they should be classes', async () => {
+      const result = await storageService.getRecurringEvents()
+      expect(result[0]).toBeInstanceOf(RecurringEvent)
     });
   });
 
