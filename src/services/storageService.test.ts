@@ -70,8 +70,12 @@ describe('storageService', () => {
     });
 
     it('should put them', async () => {
+      putHistoricalEvents.mockImplementation((opts, cb) => {
+        cb(null)
+      })
+
       await expect(storageService.putHistoricalEvents([])).resolves.toBeUndefined()
-      expect(putHistoricalEvents).toHaveBeenCalledWith([])
+      expect(putHistoricalEvents).toHaveBeenCalledTimes(1)
     });
 
     it('should handle error for put', async () => {
@@ -83,8 +87,12 @@ describe('storageService', () => {
     });
 
     it('should delete them', async () => {
+      deleteHistoricalEvents.mockImplementation((opts, cb) => {
+        cb(null)
+      })
+
       await expect(storageService.deleteHistoricalEvents([1])).resolves.toBeUndefined()
-      expect(deleteHistoricalEvents).toHaveBeenCalledWith([1])
+      expect(deleteHistoricalEvents).toHaveBeenCalledTimes(1)
     });
 
     it('should handle error for delete', async () => {
@@ -114,8 +122,12 @@ describe('storageService', () => {
     });
 
     it('should put them', async () => {
+      putRecurringEvents.mockImplementation((opts, cb) => {
+        cb(null)
+      })
+
       await expect(storageService.putRecurringEvents([])).resolves.toBeUndefined()
-      expect(putRecurringEvents).toHaveBeenCalledWith([])
+      expect(putRecurringEvents).toHaveBeenCalledTimes(1)
     });
 
     it('should handle error for put', async () => {
@@ -127,8 +139,12 @@ describe('storageService', () => {
     });
 
     it('should delete them', async () => {
+      deleteRecurringEvents.mockImplementation((opts, cb) => {
+        cb(null)
+      })
+
       await expect(storageService.deleteRecurringEvents([1])).resolves.toBeUndefined()
-      expect(deleteRecurringEvents).toHaveBeenCalledWith([1])
+      expect(deleteRecurringEvents).toHaveBeenCalledTimes(1)
     });
 
     it('should handle error for delete', async () => {
