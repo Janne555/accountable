@@ -7,17 +7,12 @@ interface ISchedule {
   generateDatesBetween(start: Date, end: Date): Date[]
 }
 
-interface ICategory {
-  id?: number
-  name: string
-}
-
 interface IEvent {
   id?: number
   amount: number
   date: Date
   type: EventType
-  categories: ICategory[]
+  categories: string[]
 }
 
 interface IRecurringEvent {
