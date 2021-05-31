@@ -1,6 +1,12 @@
-import { IEvent, Callback, Storage, IRecurringEvent } from "../types"
+import { IEvent, Callback, Storage, IRecurringEvent, Database } from "../types"
 
 class StorageWorker {
+  private database: Database
+
+  constructor(database: Database) {
+    this.database = database
+  }
+
   getEvents({ }: Storage.Options, cb: Callback<IEvent[]>) {
 
   }
