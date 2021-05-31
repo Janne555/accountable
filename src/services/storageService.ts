@@ -7,11 +7,11 @@ class StorageService {
     this.workerApi = workerApi
   }
 
-  getEvents(start: Date, end: Date): Promise<IEvent> {
+  getEvents({}: Storage.Options = {}): Promise<IEvent> {
     return Promise.reject()
   }
 
-  getHistoricalEvents(start: Date, end: Date): Promise<IEvent[]> {
+  getHistoricalEvents({}: Storage.Options = {}): Promise<IEvent[]> {
     return Promise.reject()
   }
 
