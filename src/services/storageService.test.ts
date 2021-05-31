@@ -64,7 +64,7 @@ describe('storageService', () => {
   describe('when getting recurring events', () => {
     it('should return them', async () => {
       getRecurringEvents.mockImplementation((opts, cb) => {
-        cb(null, [event])
+        cb(null, [recurringEvent])
       })
 
       await expect(storageService.getRecurringEvents()).resolves.toMatchObject([recurringEvent])
