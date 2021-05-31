@@ -28,11 +28,11 @@ describe('storageWorker', () => {
     })
 
     it('should get them', async () => {
-      await expect(storageService.getHistoricalEvents()).resolves.toMatchObject([event, event2, event3, event4])
+      await expect(storageService.getHistoricalEvents()).resolves.toMatchObject([event4, event, event3, event2])
     });
 
     it('should filter by start date', async () => {
-      await expect(storageService.getHistoricalEvents({ start: new Date("2020-01-01T00:00") })).resolves.toMatchObject([event, event2, event3])
+      await expect(storageService.getHistoricalEvents({ start: new Date("2020-01-01T00:00") })).resolves.toMatchObject([event, event3, event2])
     });
 
     it('should filter by end date', async () => {
@@ -58,6 +58,70 @@ describe('storageWorker', () => {
     it('should get them', async () => {
       const result = await storageService.getRecurringEvents()
       expect(result.map(rEvent => ({ ...rEvent, id: undefined }))).toMatchObject([recurringEvent, recurringEvent2])
+    });
+  });
+
+  fdescribe('when getting events', () => {
+    beforeEach(async () => {
+      db.events.bulkAdd([event, event2, event3, event4])
+      db.recurringEvents.bulkAdd([recurringEvent, recurringEvent2])
+    })
+
+    afterEach(async () => {
+      await db.events.clear()
+      await db.recurringEvents.clear()
+    })
+
+    it('should get them and generate recurring events', async () => {
+      const result = await storageService.getEvents({ end: new Date("2020-01-01T00:00"), start: new Date("2020-02-02T00:00") })
+      const expected: IEvent[] = [
+        event,
+        {
+          ...recurringEvent2.archetype,
+          type: "generated",
+          id: recurringEvent2.id,
+          date: new Date("2020-01-01T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-05T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-12T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-19T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-01-26T00:00")
+        },
+        event3,
+        {
+          ...recurringEvent2.archetype,
+          type: "generated",
+          id: recurringEvent2.id,
+          date: new Date("2020-02-01T00:00")
+        },
+        {
+          ...recurringEvent.archetype,
+          type: "generated",
+          id: recurringEvent.id,
+          date: new Date("2020-02-02T00:00")
+        }
+      ]
+
+      expect(result).toMatchObject(expected)
     });
   });
 });
