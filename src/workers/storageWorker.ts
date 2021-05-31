@@ -52,9 +52,11 @@ class StorageWorker {
   }
 
   putHistoricalEvents(events: IEvent[], cb: Callback<void>) {
+    cb(new Error("unimplemented"))
   }
 
   deleteHistoricalEvents(ids: number[], cb: Callback<void>) {
+    cb(new Error("unimplemented"))
   }
 
   getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>) {
@@ -81,9 +83,11 @@ class StorageWorker {
   }
 
   putRecurringEvents(rEvents: IRecurringEvent[], cb: Callback<void>) {
+    cb(new Error("unimplemented"))
   }
 
   deleteRecurringEvents(ids: number[], cb: Callback<void>) {
+    cb(new Error("unimplemented"))
   }
 }
 
