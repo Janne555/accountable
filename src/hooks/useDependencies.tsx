@@ -1,6 +1,6 @@
 import React from 'react'
 import StorageService from '../services/storageService'
-import storageWorkerClient from '../workers/storageWorkerClient'
+import StorageWorkerAPI from '../workers/storageWorkerAPI'
 
 type DependencyContext = {
   storageService: StorageService
@@ -8,7 +8,12 @@ type DependencyContext = {
 
 const dependencyContext = React.createContext<DependencyContext>({} as DependencyContext)
 
-function DependencyProvider({ children }: { children: React.ReactNode }): JSX.Element {
+type Props = {
+  children: React.ReactNode
+  storageWorkerClient: StorageWorkerAPI
+}
+
+function DependencyProvider({ children, storageWorkerClient }: Props): JSX.Element {
   const { current: storageService } = React.useRef(new StorageService(storageWorkerClient))
 
   return (
