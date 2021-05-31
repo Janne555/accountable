@@ -1,5 +1,6 @@
 import { IEvent, IRecurringEvent } from "../types"
 import Dexie from 'dexie'
+import { RecurringEvent } from "../models"
 
 class Database extends Dexie {
   events: Dexie.Table<IEvent, number>
@@ -13,6 +14,7 @@ class Database extends Dexie {
       })
       this.events = this.table("events")
       this.recurringEvents = this.table("recurringEvents")
+      this.recurringEvents.mapToClass(RecurringEvent)
   }
 }
 
