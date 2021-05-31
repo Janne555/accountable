@@ -3,13 +3,13 @@ import { createContextWrapper } from "../testUtils";
 import StorageWorkerAPI from "../workers/storageWorkerAPI";
 import * as TESTDATA from "../testData";
 import React from 'react'
-import { useEventsQuery } from "./storageHooks";
-import { render, screen, waitFor } from "@testing-library/react";
+import { useEventsQuery, useHistoricalEventsMutation } from "./storageHooks";
+import { fireEvent, render, screen, waitFor, waitForElementToBeRemoved } from "@testing-library/react";
+import { makeEvent } from "../factories";
 
 describe('storageHooks', () => {
   const db = new Database()
   const storageWorkerClient = new StorageWorkerAPI(db)
-  const Wrapper = createContextWrapper(storageWorkerClient)
 
   const { event, event2, event3, event4 } = TESTDATA.events
   const { recurringEvent, recurringEvent2 } = TESTDATA.recurringEvents
@@ -25,6 +25,7 @@ describe('storageHooks', () => {
   })
 
   it('should get events', async () => {
+    const Wrapper = createContextWrapper(storageWorkerClient)
     const Comp = () => {
       const { data } = useEventsQuery()
 
@@ -41,8 +42,75 @@ describe('storageHooks', () => {
       </Wrapper>
     )
 
+    await expect(waitFor(() => screen.getByText("bar"))).resolves.toBeInTheDocument()
+  });
+
+  it('should add event', async () => {
+    const Wrapper = createContextWrapper(storageWorkerClient)
+    const Comp = () => {
+      const { data } = useEventsQuery()
+      const { putMutation } = useHistoricalEventsMutation()
+
+      return (
+        <div>
+          <button onClick={() => {
+            putMutation.mutate([makeEvent(10, new Date(), [], "historical", "this is a new event")])
+          }}>
+            update
+          </button>
+          {data?.map(event => <p key={event.id}>{event.description}</p>)}
+        </div>
+      )
+    }
+
+    render(
+      <Wrapper>
+        <Comp />
+      </Wrapper>
+    )
+
     await waitFor(() => screen.getByText("bar"))
 
-    expect(screen.getByText("bar")).toBeInTheDocument()
+    fireEvent.click(screen.getByText("update"))
+
+    await expect(waitFor(() => screen.getByText("this is a new event"))).resolves.toBeInTheDocument()
+  });
+
+  it('should delete an event', async () => {
+    const Wrapper = createContextWrapper(storageWorkerClient)
+    const Comp = () => {
+      const { data, isLoading } = useEventsQuery()
+      const { deleteMutation } = useHistoricalEventsMutation()
+      const event = data?.find(event => event.description === "bar")
+
+      return (
+        <div>
+          <button onClick={() => {
+            if (!event?.id) return {}
+            deleteMutation.mutate([event.id])
+          }}>
+            update
+          </button>
+          <p>{isLoading ? "loading" : ""}</p>
+          {data?.map(event => <p key={event.id}>{event.description}</p>)}
+        </div>
+      )
+    }
+
+    render(
+      <Wrapper>
+        <Comp />
+      </Wrapper>
+    )
+    
+    await expect(waitFor(() => screen.getByText("bar"))).resolves.toBeInTheDocument()
+
+    fireEvent.click(screen.getByText("update"))
+
+    if (screen.queryByText("loading")) {
+      await waitForElementToBeRemoved(() => screen.getByText("loading"))
+    }
+
+    await expect(waitFor(() => screen.queryByText("bar"))).resolves.not.toBeInTheDocument()
   });
 });
