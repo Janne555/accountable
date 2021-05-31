@@ -1,5 +1,6 @@
 import { makeSchedule } from "../factories"
 import { IEvent, Callback, Storage, IRecurringEvent, Database } from "../types"
+import jsonLogic from 'json-logic-js'
 
 class StorageWorker {
   private database: Database
@@ -15,14 +16,18 @@ class StorageWorker {
   }
 
   private async _getEvents(opts: Storage.Options): Promise<IEvent[]> {
-    const { start, end } = opts
+    const { start, end, rulesLogic } = opts
     const historicalEvents = await this._getHistoricalEvents(opts)
     let allEvents = historicalEvents
 
     if (start && end) {
       const recurringEvents = await this._getRecurringEvents(opts)
       const generatedEvents = recurringEvents.flatMap(rEvent => rEvent.generateEventsBetween(start, end))
-      allEvents = allEvents.concat(generatedEvents)
+      if (rulesLogic) {
+        allEvents = allEvents.concat(generatedEvents.filter(event => jsonLogic.apply(rulesLogic, event)))
+      } else {
+        allEvents = allEvents.concat(generatedEvents)
+      }
     }
 
     allEvents.sort((a, b) => a.date.getTime() - b.date.getTime())
@@ -36,7 +41,7 @@ class StorageWorker {
       .catch(error => cb(error))
   }
 
-  private _getHistoricalEvents({ end, start }: Storage.Options): Promise<IEvent[]> {
+  private _getHistoricalEvents({ end, start, rulesLogic }: Storage.Options): Promise<IEvent[]> {
     let collection = this.database.events.toCollection()
 
     if (start) {
@@ -45,6 +50,10 @@ class StorageWorker {
 
     if (end) {
       collection = collection.filter(event => event.date.getTime() < end.getTime())
+    }
+
+    if (rulesLogic) {
+      collection = collection.filter(event => jsonLogic.apply(rulesLogic, event))
     }
 
     return collection
