@@ -2,12 +2,12 @@ import { makeEvent, makeRecurringEvent, makeSchedule } from "../factories";
 import Database from "../misc/database";
 import { RecurringEvent } from "../models";
 import { IEvent, IRecurringEvent } from "../types";
-import StorageWorker from "../workers/storageWorker";
+import StorageWorkerAPI from "../workers/storageWorkerAPI";
 import StorageService from "./storageService";
 
 describe('storageWorker', () => {
   const db = new Database()
-  const storageWorker = new StorageWorker(db)
+  const storageWorker = new StorageWorkerAPI(db)
   const storageService = new StorageService(storageWorker)
 
   const event: IEvent = { amount: 1, categories: [], date: new Date("2020-01-01T00:00"), type: "historical", description: "hello" }

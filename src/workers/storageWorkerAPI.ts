@@ -2,7 +2,7 @@ import { makeSchedule } from "../factories"
 import { IEvent, Callback, Storage, IRecurringEvent, Database } from "../types"
 import jsonLogic from 'json-logic-js'
 
-class StorageWorker {
+class StorageWorkerAPI {
   private database: Database
 
   constructor(database: Database) {
@@ -108,4 +108,4 @@ class StorageWorker {
   }
 }
 
-export default StorageWorker
+export default StorageWorkerAPI

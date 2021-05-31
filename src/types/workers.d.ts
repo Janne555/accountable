@@ -5,7 +5,7 @@ namespace Storage {
     rulesLogic?: import('json-logic-js').RulesLogic
   }
 
-  type API = import('../workers/storageWorker').default
+  type API = import('../workers/storageWorkerAPI').default
 }
 
 export {
