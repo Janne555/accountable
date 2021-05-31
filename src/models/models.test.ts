@@ -130,7 +130,8 @@ describe('RecurringEvent', () => {
     categories: [],
     date: new Date(),
     id: 1,
-    type: "archetype"
+    type: "archetype",
+    description: "hello"
   }
 
   const weeklySched = makeSchedule(0, "weekly")
