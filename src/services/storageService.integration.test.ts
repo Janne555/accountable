@@ -1,7 +1,8 @@
-import { makeEvent, makeRecurringEvent, makeSchedule } from "../factories";
+import { makeEvent, makeRecurringEvent } from "../factories";
 import Database from "../misc/database";
 import { RecurringEvent } from "../models";
-import { IEvent, IRecurringEvent } from "../types";
+import * as TESTDATA from "../testData";
+import { IEvent } from "../types";
 import StorageWorkerAPI from "../workers/storageWorkerAPI";
 import StorageService from "./storageService";
 
@@ -10,13 +11,8 @@ describe('storageWorker', () => {
   const storageWorker = new StorageWorkerAPI(db)
   const storageService = new StorageService(storageWorker)
 
-  const event: IEvent = { amount: 1, categories: [], date: new Date("2020-01-01T00:00"), type: "historical", description: "hello" }
-  const event2: IEvent = { amount: 2, categories: [], date: new Date("2020-02-01T00:00"), type: "historical", description: "there" }
-  const event3: IEvent = { amount: 30, categories: [], date: new Date("2020-01-03T00:00"), type: "historical", description: "hello" }
-  const event4: IEvent = { amount: 40, categories: [], date: new Date("2004-01-01T00:00"), type: "historical", description: "bar" }
-
-  const recurringEvent: IRecurringEvent = makeRecurringEvent([makeSchedule(0, "weekly")], { amount: 5, categories: [], date: new Date("2020-01-01T00:00"), type: "archetype", description: "hello" })
-  const recurringEvent2: IRecurringEvent = makeRecurringEvent([makeSchedule(1, "monthly")], { amount: 50, categories: ["asd"], date: new Date("2021-01-01T00:00"), type: "archetype", description: "there" })
+  const { event, event2, event3, event4 } = TESTDATA.events
+  const { recurringEvent, recurringEvent2 } = TESTDATA.recurringEvents
 
   describe('historical events', () => {
     beforeEach(async () => {
