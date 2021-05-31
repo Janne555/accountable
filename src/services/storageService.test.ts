@@ -1,4 +1,5 @@
-import { IEvent, Storage } from "../types";
+import { makeRecurringEvent } from "../factories";
+import { IEvent, IRecurringEvent, Storage } from "../types";
 import StorageService from "./storageService";
 
 describe('storageService', () => {
@@ -10,27 +11,71 @@ describe('storageService', () => {
     type: "historical"
   }
 
-  const mockGetEvents = jest.fn()
+  const recurringEvent: IRecurringEvent = makeRecurringEvent([], { ...event, type: "archetype" }, 0)
+
+  const getEvents = jest.fn()
+  const getHistoricalEvents = jest.fn()
+  const getRecurringEvents = jest.fn()
 
   const mockWorkerApi: Storage.API = {
-    getEvents: mockGetEvents
+    getEvents,
+    getHistoricalEvents,
+    getRecurringEvents
   }
 
   const storageService = new StorageService(mockWorkerApi)
 
-  it('should return events', async () => {
-    mockGetEvents.mockImplementation((opts, cb) => {
-      cb(null, [event])
-    })
+  describe('when getting events', () => {
+    it('should return them', async () => {
+      getEvents.mockImplementation((opts, cb) => {
+        cb(null, [event])
+      })
 
-    await expect(storageService.getEvents(new Date(), new Date())).resolves.toMatchObject([event])
+      await expect(storageService.getEvents()).resolves.toMatchObject([event])
+    });
+
+    it('should handle error', async () => {
+      getEvents.mockImplementation((opts, cb) => {
+        cb(new Error("failored"))
+      })
+
+      await expect(storageService.getEvents()).rejects.toThrowError("failored")
+    });
   });
 
-  it('should handle error', async () => {
-    mockGetEvents.mockImplementation((opts, cb) => {
-      cb(new Error("failored"))
-    })
+  describe('when getting historical events', () => {
+    it('should return them', async () => {
+      getHistoricalEvents.mockImplementation((opts, cb) => {
+        cb(null, [event])
+      })
 
-    await expect(storageService.getEvents(new Date(), new Date())).rejects.toThrowError("failored")
+      await expect(storageService.getHistoricalEvents()).resolves.toMatchObject([event])
+    });
+
+    it('should handle error', async () => {
+      getHistoricalEvents.mockImplementation((opts, cb) => {
+        cb(new Error("failored"))
+      })
+
+      await expect(storageService.getHistoricalEvents()).rejects.toThrowError("failored")
+    });
+  });
+
+  describe('when getting recurring events', () => {
+    it('should return them', async () => {
+      getRecurringEvents.mockImplementation((opts, cb) => {
+        cb(null, [event])
+      })
+
+      await expect(storageService.getRecurringEvents()).resolves.toMatchObject([recurringEvent])
+    });
+
+    it('should handle error', async () => {
+      getRecurringEvents.mockImplementation((opts, cb) => {
+        cb(new Error("failored"))
+      })
+
+      await expect(storageService.getRecurringEvents()).rejects.toThrowError("failored")
+    });
   });
 });
