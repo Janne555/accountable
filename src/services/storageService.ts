@@ -40,11 +40,27 @@ class StorageService {
   }
 
   putHistoricalEvents(events: IEvent[]): Promise<void> {
-    return Promise.reject()
+    return new Promise<void>((resolve, reject) => {
+      this.workerApi.putHistoricalEvents(events, (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
   deleteHistoricalEvents(ids: number[]): Promise<void> {
-    return Promise.reject()
+    return new Promise<void>((resolve, reject) => {
+      this.workerApi.deleteHistoricalEvents(ids, (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
   getRecurringEvents(options: Storage.Options = {}): Promise<IRecurringEvent[]> {
@@ -64,11 +80,27 @@ class StorageService {
   }
 
   putRecurringEvents(rEvents: IRecurringEvent[]): Promise<void> {
-    return Promise.reject()
+    return new Promise<void>((resolve, reject) => {
+      this.workerApi.putRecurringEvents(rEvents, (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
   deleteRecurringEvents(ids: number[]): Promise<void> {
-    return Promise.reject()
+    return new Promise<void>((resolve, reject) => {
+      this.workerApi.deleteRecurringEvents(ids, (error) => {
+        if (error) {
+          reject(error)
+        } else {
+          resolve()
+        }
+      })
+    })
   }
 
 }
