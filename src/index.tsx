@@ -6,13 +6,18 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import { DependencyProvider } from './hooks/useDependencies';
 import storageWorkerClient from './workers/storageWorkerClient';
+import { QueryClientProvider, QueryClient } from 'react-query'
+
+const client = new QueryClient()
 
 ReactDOM.render
   (
     <React.StrictMode>
-      <DependencyProvider storageWorkerClient={storageWorkerClient}>
-        <App />
-      </DependencyProvider>
+      <QueryClientProvider client={client}>
+        <DependencyProvider storageWorkerClient={storageWorkerClient}>
+          <App />
+        </DependencyProvider>
+      </QueryClientProvider>
     </React.StrictMode>,
     document.getElementById('root')
   );
