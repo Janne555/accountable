@@ -1,9 +1,9 @@
-import { IEvent, IRecurringEvent, StorageWorkerAPI } from "../types";
+import { IEvent, IRecurringEvent, Storage } from "../types";
 
 class StorageService {
-  private workerApi: StorageWorkerAPI
+  private workerApi: Storage.API
 
-  constructor(workerApi: StorageWorkerAPI) {
+  constructor(workerApi: Storage.API) {
     this.workerApi = workerApi
   }
 
