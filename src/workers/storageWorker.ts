@@ -52,11 +52,15 @@ class StorageWorker {
   }
 
   putHistoricalEvents(events: IEvent[], cb: Callback<void>) {
-    cb(new Error("unimplemented"))
+    this.database.events.bulkPut(events)
+      .then(() => cb(null))
+      .catch(error => cb(error))
   }
 
   deleteHistoricalEvents(ids: number[], cb: Callback<void>) {
-    cb(new Error("unimplemented"))
+    this.database.events.bulkDelete(ids)
+      .then(() => cb(null))
+      .catch(error => cb(error))
   }
 
   getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>) {
@@ -83,11 +87,15 @@ class StorageWorker {
   }
 
   putRecurringEvents(rEvents: IRecurringEvent[], cb: Callback<void>) {
-    cb(new Error("unimplemented"))
+    this.database.recurringEvents.bulkPut(rEvents)
+      .then(() => cb(null))
+      .catch(error => cb(error))
   }
 
   deleteRecurringEvents(ids: number[], cb: Callback<void>) {
-    cb(new Error("unimplemented"))
+    this.database.recurringEvents.bulkDelete(ids)
+      .then(() => cb(null))
+      .catch(error => cb(error))
   }
 }
 
