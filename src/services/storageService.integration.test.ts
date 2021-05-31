@@ -80,6 +80,10 @@ describe('storageWorker', () => {
       const result = await storageService.getHistoricalEvents({ rulesLogic: { "==": [{ var: "amount" }, 1] } })
       expect(result.map(e => ({ ...e, id: undefined }))).toContainEqual(event)
     });
+
+    it('should throw error for invalid json logic', async () => {
+      await expect(storageService.getHistoricalEvents({ rulesLogic: { "foo": [{ var: "amount" }, 1] } as any })).rejects.toThrowError("Unrecognized operation foo")
+    });
   });
 
   describe('recurring events', () => {
@@ -224,7 +228,7 @@ describe('storageWorker', () => {
         end: new Date("2020-02-02T00:00"),
         start: new Date("2020-01-01T00:00")
       })
-      
+
       const expected: IEvent[] = [
         {
           ...event3,
