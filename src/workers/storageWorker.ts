@@ -11,7 +11,20 @@ class StorageWorker {
 
   }
 
-  getHistoricalEvents({ }: Storage.Options, cb: Callback<IEvent[]>) {
+  getHistoricalEvents({ end, start }: Storage.Options, cb: Callback<IEvent[]>) {
+    let collection = this.database.events.toCollection()
+
+    if (start) {
+      collection = collection.filter(event => event.date.getTime() >= start.getTime())
+    }
+
+    if (end) {
+      collection = collection.filter(event => event.date.getTime() < end.getTime())
+    }
+
+    collection.toArray()
+      .then(events => cb(null, events))
+      .catch(error => cb(error))
   }
 
   getRecurringEvents({ }: Storage.Options, cb: Callback<IRecurringEvent[]>) {
