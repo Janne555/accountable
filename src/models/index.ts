@@ -127,7 +127,7 @@ class RecurringEvent implements IRecurringEvent {
     const allDates = this.schedules.flatMap(schedule => schedule.generateDatesBetween(start, end))
     const uniqueDates = uniqWith(allDates, (a, b) => dateFns.isSameDay(a, b))
 
-    return uniqueDates.map(date => makeEvent(this.id, this.archetype.amount, date, this.archetype.categories, "generated"))
+    return uniqueDates.map(date => makeEvent(this.archetype.amount, date, this.archetype.categories, "generated", this.id))
   }
 
 }
