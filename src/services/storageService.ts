@@ -7,16 +7,52 @@ class StorageService {
     this.workerApi = workerApi
   }
 
-  getEvents({}: Storage.Options = {}): Promise<IEvent> {
-    return Promise.reject()
+  getEvents(options: Storage.Options = {}): Promise<IEvent[]> {
+    return new Promise<IEvent[]>((resolve, reject) => {
+      this.workerApi.getEvents(options, (error, data) => {
+        if (error) {
+          reject(error)
+        }
+
+        if (data) {
+          resolve(data)
+        } else {
+          resolve([])
+        }
+      })
+    })
   }
 
-  getHistoricalEvents({}: Storage.Options = {}): Promise<IEvent[]> {
-    return Promise.reject()
+  getHistoricalEvents(options: Storage.Options = {}): Promise<IEvent[]> {
+    return new Promise<IEvent[]>((resolve, reject) => {
+      this.workerApi.getHistoricalEvents(options, (error, data) => {
+        if (error) {
+          reject(error)
+        }
+
+        if (data) {
+          resolve(data)
+        } else {
+          resolve([])
+        }
+      })
+    })
   }
 
-  getRecurringEvents(): Promise<IRecurringEvent[]> {
-    return Promise.reject()
+  getRecurringEvents(options: Storage.Options = {}): Promise<IRecurringEvent[]> {
+    return new Promise<IRecurringEvent[]>((resolve, reject) => {
+      this.workerApi.getRecurringEvents(options, (error, data) => {
+        if (error) {
+          reject(error)
+        }
+
+        if (data) {
+          resolve(data)
+        } else {
+          resolve([])
+        }
+      })
+    })
   }
 }
 
