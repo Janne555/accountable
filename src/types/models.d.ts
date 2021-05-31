@@ -4,6 +4,7 @@ interface IDateGenerationStrategy {
 
 interface ISchedule {
   dayOf: number
+  type: ScheduleType
   generateDatesBetween(start: Date, end: Date): Date[]
 }
 
