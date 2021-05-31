@@ -9,7 +9,7 @@ class StorageWorkerAPI {
     this.database = database
   }
 
-  getEvents(opts: Storage.Options, cb: Callback<IEvent[]>) {
+  getEvents(opts: Storage.Options, cb: Callback<IEvent[]>): void {
     this._getEvents(opts)
       .then(events => cb(null, events))
       .catch(error => cb(error))
@@ -35,7 +35,7 @@ class StorageWorkerAPI {
     return allEvents
   }
 
-  getHistoricalEvents(opts: Storage.Options, cb: Callback<IEvent[]>) {
+  getHistoricalEvents(opts: Storage.Options, cb: Callback<IEvent[]>): void {
     this._getHistoricalEvents(opts)
       .then(events => cb(null, events))
       .catch(error => cb(error))
@@ -60,19 +60,19 @@ class StorageWorkerAPI {
       .sortBy("date")
   }
 
-  putHistoricalEvents(events: IEvent[], cb: Callback<void>) {
+  putHistoricalEvents(events: IEvent[], cb: Callback<void>): void {
     this.database.events.bulkPut(events)
       .then(() => cb(null))
       .catch(error => cb(error))
   }
 
-  deleteHistoricalEvents(ids: number[], cb: Callback<void>) {
+  deleteHistoricalEvents(ids: number[], cb: Callback<void>): void {
     this.database.events.bulkDelete(ids)
       .then(() => cb(null))
       .catch(error => cb(error))
   }
 
-  getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>) {
+  getRecurringEvents(opts: Storage.Options, cb: Callback<IRecurringEvent[]>): void {
     this._getRecurringEvents(opts)
       .then(rEvents => cb(null, rEvents))
       .catch(error => cb(error))
@@ -95,13 +95,13 @@ class StorageWorkerAPI {
       })
   }
 
-  putRecurringEvents(rEvents: IRecurringEvent[], cb: Callback<void>) {
+  putRecurringEvents(rEvents: IRecurringEvent[], cb: Callback<void>): void {
     this.database.recurringEvents.bulkPut(rEvents)
       .then(() => cb(null))
       .catch(error => cb(error))
   }
 
-  deleteRecurringEvents(ids: number[], cb: Callback<void>) {
+  deleteRecurringEvents(ids: number[], cb: Callback<void>): void {
     this.database.recurringEvents.bulkDelete(ids)
       .then(() => cb(null))
       .catch(error => cb(error))
