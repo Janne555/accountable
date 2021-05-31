@@ -1,8 +1,10 @@
 module.exports = {
   globals: {
-    "ts-jest": {
+    'ts-jest': {
+      useESM: true,
       tsConfig: "tsconfig.app.json",
-    },
+      isolatedModules: true,
+    }
   },
   transform: {
     "^.+\\.jsx?$": "babel-jest",
