@@ -61,7 +61,7 @@ describe('storageWorker', () => {
     });
   });
 
-  fdescribe('when getting events', () => {
+  describe('when getting events', () => {
     beforeEach(async () => {
       db.events.bulkAdd([event, event2, event3, event4])
       db.recurringEvents.bulkAdd([recurringEvent, recurringEvent2])
