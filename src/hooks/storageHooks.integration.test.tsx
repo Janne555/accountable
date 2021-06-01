@@ -119,7 +119,6 @@ describe('storageHooks', () => {
     const Comp = () => {
       const [start, setStart] = React.useState(new Date("2000-01-01T00:00"))
       const { data, isLoading } = useEventsQuery(start)
-      console.log(start)
       return (
         <div>
           <button onClick={() => {
