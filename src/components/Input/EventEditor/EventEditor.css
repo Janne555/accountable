@@ -1,0 +1,22 @@
+.event-editor {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto 50px;
+  row-gap: 1em;
+  column-gap: 1em;
+  height: 100%;
+}
+
+.event-editor-save {
+  grid-area: 2 / 2;
+  justify-self: end;
+}
+
+.event-editor-input {
+  grid-area: 1 / 1 / 1 / 3;
+  height: 100%;
+}
+
+.event-editor-input > div {
+  height: 100%;
+}
