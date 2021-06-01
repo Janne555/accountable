@@ -102,7 +102,43 @@ describe('storageHooks', () => {
         <Comp />
       </Wrapper>
     )
-    
+
+    await expect(waitFor(() => screen.getByText("bar"))).resolves.toBeInTheDocument()
+
+    fireEvent.click(screen.getByText("update"))
+
+    if (screen.queryByText("loading")) {
+      await waitForElementToBeRemoved(() => screen.getByText("loading"))
+    }
+
+    await expect(waitFor(() => screen.queryByText("bar"))).resolves.not.toBeInTheDocument()
+  });
+
+  it('should update query if opts change', async () => {
+    const Wrapper = createContextWrapper(storageWorkerClient)
+    const Comp = () => {
+      const [start, setStart] = React.useState(new Date("2000-01-01T00:00"))
+      const { data, isLoading } = useEventsQuery(start)
+      console.log(start)
+      return (
+        <div>
+          <button onClick={() => {
+            setStart(new Date("2020-01-01T00:00"))
+          }}>
+            update
+          </button>
+          <p>{isLoading ? "loading" : ""}</p>
+          {data?.map(event => <p key={event.id}>{event.description}</p>)}
+        </div>
+      )
+    }
+
+    render(
+      <Wrapper>
+        <Comp />
+      </Wrapper>
+    )
+
     await expect(waitFor(() => screen.getByText("bar"))).resolves.toBeInTheDocument()
 
     fireEvent.click(screen.getByText("update"))
