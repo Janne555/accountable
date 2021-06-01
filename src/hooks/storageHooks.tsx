@@ -1,10 +1,11 @@
 import { useDependecies } from "./useDependencies";
 import { useQuery, useMutation, useQueryClient } from 'react-query'
-import { IEvent, IRecurringEvent, Storage } from '../types'
+import { IEvent, IRecurringEvent } from '../types'
+import { RulesLogic } from "json-logic-js";
 
-function useEventsQuery(opts?: Storage.Options) {
+function useEventsQuery(start?: Date, end?: Date, rulesLogic?: RulesLogic) {
   const { storageService } = useDependecies()
-  return useQuery('events', () => storageService.getEvents(opts))
+  return useQuery(['events', start, end, rulesLogic], () => storageService.getEvents({ start, end, rulesLogic }), {})
 }
 
 function useHistoricalEventsMutation() {
